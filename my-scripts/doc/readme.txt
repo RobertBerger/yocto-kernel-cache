@@ -1,12 +1,12 @@
 1) create a new repo on github
 
-git clone git@github.com:RobertBerger/meta-arm.git
+git clone git@github.com:RobertBerger/yocto-kernel-cache.git
 
 2) add my-scripts dir
 
-cd meta-arm
+cd yocto-kernel-cache
 
-echo "# meta-arm fork" >> README.md
+echo "# yocto-kernel-cache fork" >> README.md
 
 git init
 
@@ -14,20 +14,18 @@ git add .
 
 git commit -m "first commit"
 
-#git remote add origin git@github.com:RobertBerger/meta-arm.git
-
 git push -u origin master
 
 3) use my repo
 
-mv meta-arm meta-arm.ori
-git clone git@github.com:RobertBerger/meta-arm.git
+mv yocto-kernel-cache yocto-kernel-cache.ori
+git clone git@github.com:RobertBerger/yocto-kernel-cache.git
 
 4) add upstream
 
-cd meta-arm
+cd yocto-kernel-cache
 
-git remote add official-upstream https://git.yoctoproject.org/meta-arm
+git remote add official-upstream https://git.yoctoproject.org/yocto-kernel-cache
 
 $ git fetch official-upstream
 
