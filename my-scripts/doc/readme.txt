@@ -35,11 +35,7 @@ warning: no common commits
 
 5) use specific upstream branch and make our own branch
 
-git checkout -b v7.2/standard/phyboard-pollux-imx8mp-3 official-upstream/v7.2/standard/base
-
-
-
-
+git checkout -b yocto-7.2 official-upstream/yocto-7.2
 
 
 
