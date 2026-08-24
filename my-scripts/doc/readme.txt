@@ -35,7 +35,13 @@ warning: no common commits
 
 5) use specific upstream branch and make our own branch
 
-git co remotes/official-upstream/master
+git checkout -b v7.2/standard/phyboard-pollux-imx8mp-3 official-upstream/v7.2/standard/base
+
+
+
+
+
+
 
 5.1) we want commit: 4112fda50b814ad6e3cfaefe5cad78a83114599a
 
