@@ -15,4 +15,7 @@ nocfg
 
 git clone https://git.yoctoproject.org/yocto-kernel-tools.git
 
+force:
+
+let's see if this works ;)
 
