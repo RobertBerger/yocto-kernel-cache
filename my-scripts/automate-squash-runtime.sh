@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# You might want to check step 7 for the commit message!!!
+
 # =====================================================================
 # 🛡️ SAFETY FIRST: Exit instantly if any single command fails
 # =====================================================================
