@@ -47,10 +47,10 @@ REPO_DIR=$(basename "$(pwd)")
 # 2. Step out one level to create physical tarball archive backup
 echo "1. Stepping out one level to create physical tarball archive backup..."
 cd ..
-tar czvf "${REPO_DIR}.working.final.tar.gz" "${REPO_DIR}"
+tar czvf "${REPO_DIR}-${BRANCH_VER}.working.final.tar.gz" "${REPO_DIR}"
 
 # Hard Safety Check: Stop everything if the tarball creation failed
-if [ ! -f "${REPO_DIR}.working.final.tar.gz" ]; then
+if [ ! -f "${REPO_DIR}-${BRANCH_VER}.working.final.tar.gz" ]; then
     echo "❌ CRITICAL ERROR: Tarball backup file was not created! Aborting." >&2
     exit 1
 fi
