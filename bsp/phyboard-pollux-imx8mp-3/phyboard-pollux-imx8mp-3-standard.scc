@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+
+# =====================================================================
+# Machine idendity has to be in this file
+# =====================================================================
+
+define KMACHINE phyboard-pollux-imx8mp-3
+define KTYPE standard
+define KARCH arm64
+
+include phyboard-pollux-imx8mp-3-standard-global-includes.scc
+#include phyboard-pollux-imx8mp-3-standard-patch-queue.scc
