@@ -1,0 +1,563 @@
+From 16e0f7b5872b780eea8c61091de5c5881fa6000e Mon Sep 17 00:00:00 2001
+From: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Date: Sat, 22 Aug 2026 19:08:28 +0000
+Subject: [PATCH] freescale: additional imx8mp-phyboard-pollux dtso files
+
+Signed-off-by: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Upstream-Status: Inappropriate [res/phytec specific - from 7.2 kernel]
+---
+ .../imx8mp-phyboard-pollux-etml1010g3dra.dtso |  44 ++++
+ ...yboard-pollux-peb-av-10-etml1010g3dra.dtso |  45 ++++
+ ...hyboard-pollux-peb-av-10-ph128800t006.dtso |  45 ++++
+ .../imx8mp-phyboard-pollux-peb-av-10.dtsi     | 198 ++++++++++++++++++
+ .../imx8mp-phyboard-pollux-peb-av-10.dtso     |   9 +
+ .../imx8mp-phyboard-pollux-peb-wlbt-05.dtso   | 108 ++++++++++
+ .../imx8mp-phyboard-pollux-ph128800t006.dtso  |  45 ++++
+ 7 files changed, 494 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-etml1010g3dra.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-etml1010g3dra.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-ph128800t006.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-wlbt-05.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-ph128800t006.dtso
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-etml1010g3dra.dtso b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-etml1010g3dra.dtso
+new file mode 100644
+index 000000000..7a7f27d6b
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-etml1010g3dra.dtso
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/imx8mp-clock.h>
++
++/dts-v1/;
++/plugin/;
++
++&backlight_lvds1 {
++	brightness-levels = <0 8 16 32 64 128 255>;
++	default-brightness-level = <8>;
++	enable-gpios = <&gpio2 20 GPIO_ACTIVE_LOW>;
++	num-interpolated-steps = <2>;
++	pwms = <&pwm3 0 50000 0>;
++	status = "okay";
++};
++
++&lcdif2 {
++	status = "okay";
++};
++
++&lvds_bridge {
++	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_LDB>, <&clk IMX8MP_VIDEO_PLL1>;
++	assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>;
++	/*
++	 * The LVDS panel uses 72.4 MHz pixel clock, set IMX8MP_VIDEO_PLL1 to
++	 * 72.4 * 7 = 506.8 MHz so the LDB serializer and LCDIFv3 scanout
++	 * engine can reach accurate pixel clock of exactly 72.4 MHz.
++	 */
++	assigned-clock-rates = <0>, <506800000>;
++	status = "okay";
++};
++
++&panel_lvds1 {
++	compatible = "edt,etml1010g3dra";
++	status = "okay";
++};
++
++&pwm3 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-etml1010g3dra.dtso b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-etml1010g3dra.dtso
+new file mode 100644
+index 000000000..aceb5b605
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-etml1010g3dra.dtso
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/imx8mp-clock.h>
++#include "imx8mp-phyboard-pollux-peb-av-10.dtsi"
++
++&backlight_lvds0 {
++	brightness-levels = <0 8 16 32 64 128 255>;
++	default-brightness-level = <8>;
++	enable-gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
++	num-interpolated-steps = <2>;
++	pwms = <&pwm4 0 50000 0>;
++	status = "okay";
++};
++
++&lcdif2 {
++	status = "okay";
++};
++
++&lvds_bridge {
++	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_LDB>, <&clk IMX8MP_VIDEO_PLL1>;
++	assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>;
++	/*
++	 * The LVDS panel uses 72.4 MHz pixel clock, set IMX8MP_VIDEO_PLL1 to
++	 * 72.4 * 7 = 506.8 MHz so the LDB serializer and LCDIFv3 scanout
++	 * engine can reach accurate pixel clock of exactly 72.4 MHz.
++	 */
++	assigned-clock-rates = <0>, <506800000>;
++	status = "okay";
++};
++
++&panel_lvds0 {
++	compatible = "edt,etml1010g3dra";
++	status = "okay";
++};
++
++&pwm4 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-ph128800t006.dtso b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-ph128800t006.dtso
+new file mode 100644
+index 000000000..559286f38
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10-ph128800t006.dtso
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/imx8mp-clock.h>
++#include "imx8mp-phyboard-pollux-peb-av-10.dtsi"
++
++&backlight_lvds0 {
++	brightness-levels = <0 8 16 32 64 128 255>;
++	default-brightness-level = <8>;
++	enable-gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
++	num-interpolated-steps = <2>;
++	pwms = <&pwm4 0 66667 0>;
++	status = "okay";
++};
++
++&lcdif2 {
++	status = "okay";
++};
++
++&lvds_bridge {
++	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_LDB>, <&clk IMX8MP_VIDEO_PLL1>;
++	assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>;
++	/*
++	 * The LVDS panel uses 66.5 MHz pixel clock, set IMX8MP_VIDEO_PLL1 to
++	 * 66.5 * 7 = 465.5 MHz so the LDB serializer and LCDIFv3 scanout
++	 * engine can reach accurate pixel clock of exactly 66.5 MHz.
++	 */
++	assigned-clock-rates = <0>, <465500000>;
++	status = "okay";
++};
++
++&panel_lvds0 {
++	compatible = "powertip,ph128800t006-zhc01";
++	status = "okay";
++};
++
++&pwm4 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtsi
+new file mode 100644
+index 000000000..bb740f845
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtsi
+@@ -0,0 +1,198 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++#include <dt-bindings/gpio/gpio.h>
++#include "imx8mp-pinfunc.h"
++
++&{/} {
++	backlight_lvds0: backlight0 {
++		compatible = "pwm-backlight";
++		pinctrl-0 = <&pinctrl_lvds0>;
++		pinctrl-names = "default";
++		power-supply = <&reg_vcc_12v>;
++		status = "disabled";
++	};
++
++	panel_lvds0: panel-lvds0 {
++		backlight = <&backlight_lvds0>;
++		power-supply = <&reg_vcc_3v3_sw>;
++		status = "disabled";
++
++		port {
++			panel0_in: endpoint {
++				remote-endpoint = <&ldb_lvds_ch0>;
++			};
++		};
++	};
++
++	reg_vcc_12v: regulator-12v {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-max-microvolt = <12000000>;
++		regulator-min-microvolt = <12000000>;
++		regulator-name = "VCC_12V";
++	};
++
++	reg_vcc_1v8_audio: regulator-1v8 {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-max-microvolt = <1800000>;
++		regulator-min-microvolt = <1800000>;
++		regulator-name = "VCC_1V8_Audio";
++	};
++
++	reg_vcc_3v3_analog: regulator-3v3 {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "VCC_3V3_Analog";
++	};
++
++	sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "snd-peb-av-10";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,bitclock-master = <&dailink_master>;
++		simple-audio-card,frame-master = <&dailink_master>;
++		simple-audio-card,mclk-fs = <32>;
++		simple-audio-card,widgets =
++			"Line", "Line In",
++			"Speaker", "Speaker",
++			"Microphone", "Microphone Jack",
++			"Headphone", "Headphone Jack";
++		simple-audio-card,routing =
++			"Speaker", "SPOP",
++			"Speaker", "SPOM",
++			"Headphone Jack", "HPLOUT",
++			"Headphone Jack", "HPROUT",
++			"LINE1L", "Line In",
++			"LINE1R", "Line In",
++			"MIC3R", "Microphone Jack",
++			"Microphone Jack", "Mic Bias";
++
++		simple-audio-card,cpu {
++			sound-dai = <&sai2>;
++		};
++
++		dailink_master: simple-audio-card,codec {
++			sound-dai = <&codec>;
++			clocks = <&clk IMX8MP_CLK_SAI2>;
++		};
++	};
++};
++
++&i2c4 {
++	clock-frequency = <400000>;
++	pinctrl-0 = <&pinctrl_i2c4>;
++	pinctrl-1 = <&pinctrl_i2c4_gpio>;
++	pinctrl-names = "default", "gpio";
++	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	codec: codec@18 {
++		compatible = "ti,tlv320aic3007";
++		reg = <0x18>;
++		pinctrl-0 = <&pinctrl_tlv320>;
++		pinctrl-names = "default";
++		#sound-dai-cells = <0>;
++		reset-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>;
++		ai3x-gpio-func = <0xd 0x0>;
++		ai3x-micbias-vg = <2>;
++		AVDD-supply = <&reg_vcc_3v3_analog>;
++		DRVDD-supply = <&reg_vcc_3v3_analog>;
++		DVDD-supply = <&reg_vcc_1v8_audio>;
++		IOVDD-supply = <&reg_vcc_3v3_sw>;
++	};
++
++	eeprom@57 {
++		compatible = "atmel,24c32";
++		reg = <0x57>;
++		pagesize = <32>;
++		vcc-supply = <&reg_vcc_3v3_sw>;
++	};
++};
++
++&ldb_lvds_ch0 {
++	remote-endpoint = <&panel0_in>;
++};
++
++&pwm4 {
++	pinctrl-0 = <&pinctrl_pwm4>;
++	pinctrl-names = "default";
++};
++
++&sai2 {
++	pinctrl-0 = <&pinctrl_sai2>;
++	pinctrl-names = "default";
++	assigned-clocks = <&clk IMX8MP_CLK_SAI2>;
++	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
++	assigned-clock-rates = <12288000>;
++	clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_SAI2_IPG>,
++		 <&clk IMX8MP_CLK_DUMMY>,
++		 <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_SAI2_MCLK1>,
++		 <&clk IMX8MP_CLK_DUMMY>,
++		 <&clk IMX8MP_CLK_DUMMY>,
++		 <&clk IMX8MP_AUDIO_PLL1_OUT>,
++		 <&clk IMX8MP_AUDIO_PLL2_OUT>;
++	clock-names = "bus", "mclk0", "mclk1", "mclk2", "mclk3", "pll8k",
++		      "pll11k";
++	#sound-dai-cells = <0>;
++	fsl,sai-mclk-direction-output;
++	fsl,sai-synchronous-rx;
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl_i2c4: i2c4grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C4_SCL__I2C4_SCL		0x400001c2
++			MX8MP_IOMUXC_I2C4_SDA__I2C4_SDA		0x400001c2
++		>;
++	};
++
++	pinctrl_i2c4_gpio: i2c4gpiogrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C4_SCL__GPIO5_IO20	0x1e2
++			MX8MP_IOMUXC_I2C4_SDA__GPIO5_IO21	0x1e2
++		>;
++	};
++
++	pinctrl_lvds0: lvds0grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI3_TXD__GPIO5_IO01	0x12
++		>;
++	};
++
++	pinctrl_pwm4: pwm4grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI3_MCLK__PWM4_OUT	0x12
++		>;
++	};
++
++	pinctrl_sai2: sai2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI2_MCLK__AUDIOMIX_SAI2_MCLK	0xd6
++			MX8MP_IOMUXC_SAI2_RXFS__AUDIOMIX_SAI2_RX_SYNC	0xd6
++			MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK	0xd6
++			MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00	0xd6
++			MX8MP_IOMUXC_SAI2_RXD0__AUDIOMIX_SAI2_RX_DATA00 0xd6
++		>;
++	};
++
++	pinctrl_tlv320: tlv320grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x16
++			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22	0x16
++		>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtso b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtso
+new file mode 100644
+index 000000000..95078618e
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-av-10.dtso
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++/dts-v1/;
++/plugin/;
++
++#include "imx8mp-phyboard-pollux-peb-av-10.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-wlbt-05.dtso b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-wlbt-05.dtso
+new file mode 100644
+index 000000000..0e98f4d94
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-peb-wlbt-05.dtso
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include "imx8mp-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	wlbt_clock: clock-32768 {
++		compatible = "fixed-clock";
++		clock-accuracy = <20000>;
++		clock-frequency = <32768>;
++		clock-output-names = "WIFIBT_SLOW_CLK";
++		#clock-cells = <0>;
++	};
++
++	usdhc1_pwrseq: pwr-seq {
++		compatible = "mmc-pwrseq-simple";
++		post-power-on-delay-ms = <250>;
++		reset-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&iomuxc {
++	pinctrl_uart3: uart3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD1_RESET_B__UART3_DCE_RTS	0x140	/* RTS */
++			MX8MP_IOMUXC_SD1_STROBE__UART3_DCE_CTS	0x140	/* CTS */
++			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140	/* RX */
++			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140	/* TX */
++		>;
++	};
++
++	pinctrl_bluetooth: bluetoothgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06	0x106	/* BT_DEV_WAKE_EXP */
++			MX8MP_IOMUXC_SD1_DATA5__GPIO2_IO07	0x106	/* BT_REG_ON_EXP */
++			MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09	0x106	/* BT_HOST_WAKE_EXP */
++		>;
++	};
++
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK	0x190	/* SDIO_CLK */
++			MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	0x1d0	/* SDIO_CMD */
++			MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0	0x1d0	/* SDIO_D0 */
++			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1	0x1d0	/* SDIO_D1 */
++			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2	0x1d0	/* SDIO_D2 */
++			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3	0x1d0	/* SDIO_D3 */
++		>;
++	};
++
++	pinctrl_wifi: wifigrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05	0x106	/* WL_REG_ON_EXP */
++		>;
++	};
++};
++
++&uart3 {
++	assigned-clocks = <&clk IMX8MP_CLK_UART3>;
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
++	pinctrl-0 = <&pinctrl_uart3>;
++	pinctrl-names = "default";
++	uart-has-rtscts;
++	status = "okay";
++
++	bluetooth {
++		compatible = "brcm,bcm43438-bt";
++		pinctrl-0 = <&pinctrl_bluetooth>;
++		pinctrl-names = "default";
++		clock-names = "lpo";
++		clocks = <&wlbt_clock>;
++		device-wakeup-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
++		host-wakeup-gpios = <&gpio2 9 GPIO_ACTIVE_HIGH>;
++		max-speed = <3000000>;
++		shutdown-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
++		vbat-supply = <&reg_vcc_3v3_sw>;
++		vddio-supply = <&reg_vcc_1v8_exp_con>;
++	};
++};
++
++&usdhc1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	pinctrl-0 = <&pinctrl_usdhc1>;
++	pinctrl-names = "default";
++	bus-width = <4>;
++	max-frequency = <50000000>;
++	mmc-pwrseq = <&usdhc1_pwrseq>;
++	non-removable;
++	vmmc-supply = <&reg_vcc_3v3_sw>;
++	status = "okay";
++
++	wifi@1 {
++		compatible = "brcm,bcm4329-fmac";
++		reg = <1>;
++		pinctrl-0 = <&pinctrl_wifi>;
++		pinctrl-names = "default";
++		reset-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-ph128800t006.dtso b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-ph128800t006.dtso
+new file mode 100644
+index 000000000..a39f83bf8
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-ph128800t006.dtso
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright (C) 2025 PHYTEC Messtechnik GmbH
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/imx8mp-clock.h>
++
++/dts-v1/;
++/plugin/;
++
++&backlight_lvds1 {
++	brightness-levels = <0 8 16 32 64 128 255>;
++	default-brightness-level = <8>;
++	enable-gpios = <&gpio2 20 GPIO_ACTIVE_LOW>;
++	num-interpolated-steps = <2>;
++	pwms = <&pwm3 0 66667 0>;
++	status = "okay";
++};
++
++&lcdif2 {
++	status = "okay";
++};
++
++&lvds_bridge {
++	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_LDB>, <&clk IMX8MP_VIDEO_PLL1>;
++	assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>;
++	/*
++	 * The LVDS panel uses 72.4 MHz pixel clock, set IMX8MP_VIDEO_PLL1 to
++	 * 66.5 * 7 = 465.5 MHz so the LDB serializer and LCDIFv3 scanout
++	 * engine can reach accurate pixel clock of exactly 66.5 MHz.
++	 */
++	assigned-clock-rates = <0>, <465500000>;
++	status = "okay";
++};
++
++
++&panel_lvds1 {
++	compatible = "powertip,ph128800t006-zhc01";
++	status = "okay";
++};
++
++&pwm3 {
++	status = "okay";
++};
+-- 
+2.34.1
+

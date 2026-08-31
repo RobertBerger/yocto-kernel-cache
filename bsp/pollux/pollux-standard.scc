@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MIT
+
+# =====================================================================
+# Machine idendity has to be in this file
+# =====================================================================
+
+define KMACHINE pollux
+define KTYPE standard
+define KARCH arm64
+
+
+include bsp/phyboard-pollux-imx8mp-3/phyboard-pollux-imx8mp-3-standard-global-includes.scc
+include bsp/phyboard-pollux-imx8mp-3/phyboard-pollux-imx8mp-3-standard-patch-queue.scc
+
+# ===== up to this point we should be phyboard-pollux-imx8mp-3-standard with KMACHINE pollux =====
+
+include features/hello-in-tree/non-atomic-in-tree-kernel-module.scc
+include pollux-standard-patch-queue.scc

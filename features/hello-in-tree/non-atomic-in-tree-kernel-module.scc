@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: MIT
+define KFEATURE_DESCRIPTION "In tree hello world, fragment which sets it to =m"
+define KFEATURE_COMPATIBILITY all
+
+patch non-default-testmod.patch
+kconf non-hardware hello-in-tree.cfg
