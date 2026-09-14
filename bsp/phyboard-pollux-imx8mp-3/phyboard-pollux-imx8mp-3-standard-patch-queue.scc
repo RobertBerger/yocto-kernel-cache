@@ -5,3 +5,5 @@
 # =====================================================================
 # add phytec device tree overlays
 patch 0001-freescale-additional-imx8mp-phyboard-pollux-dtso-fil.patch
+# fix flexspi flash cells warning when enabling spi nor flash in U-Boot
+patch 0002-fix-flexspi-flash-cells-warning.patch
