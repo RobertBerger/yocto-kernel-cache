@@ -3,4 +3,4 @@
 # =====================================================================
 # 3. PATCH QUEUE (Apply out-of-tree patches cleanly to your branch)
 # =====================================================================
-# patch xxx.patch
+patch 0001-freescale-fix-flexspi-flash-node-missing-cells.patch

@@ -9,4 +9,4 @@ define KTYPE standard
 define KARCH arm64
 
 include phyboard-pollux-imx8mp-3-standard-global-includes.scc
-#include phyboard-pollux-imx8mp-3-standard-patch-queue.scc
+include phyboard-pollux-imx8mp-3-standard-patch-queue.scc
