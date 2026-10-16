@@ -1,30 +1,61 @@
-on the build machine:
+on the git machine:
 
-backup meta-arm (tarball)
+backup yocto-kernel-cache (tarball)
 
-cd meta-arm
+cd yocto-kernel-cache
+
+
+
+----------------------------
+== update/rebase custom branches ==
+
+The last 3 commits before update/rebase:
+
+# -->
+
+commit 804b4f627200a9dc8a2f37df47fd214238610869 (HEAD -> yocto-6.18, origin/yocto-6.18)
+Author: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Date:   Mon Sep 14 15:19:29 2026 +0200
+
+    fix flexspi flash cell warning
+
+commit c49bc632b09e620ac64dfb93cfcad4cded83d20b
+Author: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Date:   Mon Aug 31 18:01:45 2026 +0200
+
+    added: phyboard-pollux-imx8mp-3-standard, pollux-standard
+
+commit e3c9421323cd71dec00e0ac745ed4cb083105616 (official-upstream/yocto-6.18)
+Author: Anis Bougrine <anis.bougrine10@gmail.com>
+Date:   Sun Aug 16 13:47:14 2026 +0200
+
+    features/module-signing: explicitly enable module auto-signing
+
+# <--
 
 git co master
-git remote add official-upstream https://git.yoctoproject.org/meta-arm
 git fetch official-upstream
 
-# here are my modifications to a previous version
-git checkout 2026-08-11-training
+# 2. Rebase your first branch directly against the remote tracking branch
+git checkout yocto-6.18
+git rebase official-upstream/yocto-6.18
 
-# new branch
-git checkout -b 2026-08-11-training-merged
-git diff 2026-08-11-training
-# they should be identical and we should be on the 2026-08-11-training-merged branch
+804b4f627200a9dc8a2f37df47fd214238610869 and c49bc632b09e620ac64dfb93cfcad4cded83d20b seem to be still here for some reason, which is good
 
-# rebase
-git rebase official-upstream/master
+commit 804b4f627200a9dc8a2f37df47fd214238610869 (origin/yocto-6.18)
+Author: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Date:   Mon Sep 14 15:19:29 2026 +0200
 
-Successfully rebased and updated refs/heads/2026-08-11-training-merged.
+    fix flexspi flash cell warning
 
-bitbake core-image-minimal
+commit c49bc632b09e620ac64dfb93cfcad4cded83d20b
+Author: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Date:   Mon Aug 31 18:01:45 2026 +0200
 
-ERROR: No recipes in default available for:
-  /workdir/build/yocto-ampliphy-master-2026-08-11-01-pinned/bitbake-builds/yocto-ampliphy-pinned/layers/meta-phytec/dynamic-layers/meta-arm/recipes-bsp/trusted-firmware-a/trusted-firmware-a_2.10%.bbappend
+    added: phyboard-pollux-imx8mp-3-standard, pollux-standard
 
-We need to rebase meta-phytec to get this fixed!
+----------------------------
 
+git co master
+cd my-scripts
+./push-all-to-github.sh
