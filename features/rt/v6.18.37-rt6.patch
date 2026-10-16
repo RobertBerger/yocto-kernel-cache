@@ -1,0 +1,20 @@
+From c82ff0cbda2a00b9073e06c9fe4ba550c9056d45 Mon Sep 17 00:00:00 2001
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date: Mon, 29 Jun 2026 16:52:33 +0200
+Subject: [PATCH 4/4] v6.18.37-rt6
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ localversion-rt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/localversion-rt b/localversion-rt
+index 0efe7ba1930e1..8fc605d806670 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt5
++-rt6
+-- 
+2.43.0
+

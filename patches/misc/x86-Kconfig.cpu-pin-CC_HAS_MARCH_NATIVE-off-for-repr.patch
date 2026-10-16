@@ -1,0 +1,61 @@
+From 364c4b44ab2dcc7dfff16076522b62827bcb0e7d Mon Sep 17 00:00:00 2001
+From: Bruce Ashfield <bruce.ashfield@gmail.com>
+Date: Tue, 22 Sep 2026 21:50:19 -0400
+Subject: [PATCH] x86/Kconfig.cpu: pin CC_HAS_MARCH_NATIVE off for reproducible
+ builds
+
+CONFIG_CC_HAS_MARCH_NATIVE is a def_bool computed from
+$(cc-option, -march=native), i.e. it is probed from the build-host
+compiler. In cross builds the result varies by build host -- the kernel's
+own comment already notes "This flag might not be available in
+cross-compilers" -- so it is captured differently across otherwise
+identical builds and breaks kernel package reproducibility:
+
+  .config / auto.conf:  CONFIG_CC_HAS_MARCH_NATIVE=y   (host A) vs absent (host B)
+  autoconf.h:           #define CONFIG_CC_HAS_MARCH_NATIVE 1
+  .config:              # CONFIG_X86_NATIVE_CPU is not set
+  rustc_cfg:            --cfg=CONFIG_CC_HAS_MARCH_NATIVE
+
+With CONFIG_IKCONFIG=y the .config is gzip-embedded into the kernel
+(kernel_config_data), so the difference also propagates into
+vmlinux/bzImage/kernel-dbg (the blob shifts kernel_config_data_end and
+every symbol after it), failing reproducibility across the whole kernel
+package set -- not just the config text files, which is why a post-package
+filter is not sufficient.
+
+CC_HAS_MARCH_NATIVE gates only X86_NATIVE_CPU ("build and optimize for
+local/native CPU"), which is never enabled in these builds and is
+antithetical to a distributed/reproducible kernel. Pin the symbol off so
+the captured config is deterministic regardless of build host. On-target
+'make scripts prepare' uses this same patched Kconfig, so it recomputes
+the same value and needs no reconfiguration.
+
+Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
+---
+ arch/x86/Kconfig.cpu | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
+index 755d64bb9d265..fbc56a2cd5d4d 100644
+--- a/arch/x86/Kconfig.cpu
++++ b/arch/x86/Kconfig.cpu
+@@ -246,8 +246,14 @@ config MATOM
+ endchoice
+ 
+ config CC_HAS_MARCH_NATIVE
+-	# This flag might not be available in cross-compilers:
+-	def_bool $(cc-option, -march=native)
++	# yocto: pinned off for reproducible builds. The upstream
++	# 'def_bool $(cc-option, -march=native)' is probed from the build-host
++	# compiler and varies across cross build hosts, so it (and the
++	# X86_NATIVE_CPU line it gates) is captured differently in the kernel
++	# config -- and via CONFIG_IKCONFIG into the image -- breaking
++	# reproducibility. It only gates X86_NATIVE_CPU, which is never enabled
++	# here, so pinning it off has no functional effect.
++	def_bool n
+ 	# LLVM 18 has an easily triggered internal compiler error in core
+ 	# networking code with '-march=native' on certain systems:
+ 	# https://github.com/llvm/llvm-project/issues/72026
+-- 
+2.43.0
+
