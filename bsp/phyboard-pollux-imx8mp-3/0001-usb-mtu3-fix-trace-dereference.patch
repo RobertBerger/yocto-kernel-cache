@@ -1,3 +1,4 @@
+From 7ff7dedc413383c84bee42450378c855adc24867 Mon Sep 17 00:00:00 2001
 From: Vladimir Murzin <vladimir.murzin@arm.com>
 Date: Wed, 9 Sep 2026 11:31:28 +0100
 Subject: [PATCH] usb: mtu3: Fix double dereference in TP_printk
@@ -18,37 +19,36 @@ Signed-off-by: Vladimir Murzin <vladimir.murzin@arm.com>
 Signed-off-by: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
 Upstream-Status: Submitted [Linux 7.3-rc7, https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=dev.2026.09.18a]
 ---
- drivers/usb/mtu3/mtu3_trace.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/usb/mtu3/mtu3_trace.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/mtu3/mtu3_trace.h b/drivers/usb/mtu3/mtu3_trace.h
 index 89870175d635..4d4bae25fa1f 100644
 --- a/drivers/usb/mtu3/mtu3_trace.h
 +++ b/drivers/usb/mtu3/mtu3_trace.h
 @@ -224,6 +224,7 @@ DECLARE_EVENT_CLASS(mtu3_log_ep,
-		__field(unsigned int, flags)
-		__field(unsigned int, direction)
-		__field(struct mtu3_gpd_ring *, gpd_ring)
+ 		__field(unsigned int, flags)
+ 		__field(unsigned int, direction)
+ 		__field(struct mtu3_gpd_ring *, gpd_ring)
 +		__field(dma_addr_t, gpd_ring_dma)
-	),
-
-	TP_fast_assign(
+ 	),
+ 	TP_fast_assign(
+ 		__assign_str(name);
 @@ -235,12 +236,13 @@ DECLARE_EVENT_CLASS(mtu3_log_ep,
-		__entry->flags = mep->flags;
-		__entry->direction = mep->is_in;
-		__entry->gpd_ring = &mep->gpd_ring;
+ 		__entry->flags = mep->flags;
+ 		__entry->direction = mep->is_in;
+ 		__entry->gpd_ring = &mep->gpd_ring;
 +		__entry->gpd_ring_dma = mep->gpd_ring.dma;
-	),
-
-	TP_printk("%s: type %s maxp %d slot %d mult %d burst %d ring %p/%pad flags %c:%c%c%c:%c",
-		__get_str(name), usb_ep_type_string(__entry->type),
-		__entry->maxp, __entry->slot,
-		__entry->mult, __entry->maxburst,
+ 	),
+ 	TP_printk("%s: type %s maxp %d slot %d mult %d burst %d ring %p/%pad flags %c:%c%c%c:%c",
+ 		__get_str(name), usb_ep_type_string(__entry->type),
+ 		__entry->maxp, __entry->slot,
+ 		__entry->mult, __entry->maxburst,
 -		__entry->gpd_ring, &__entry->gpd_ring->dma,
 +		__entry->gpd_ring, &__entry->gpd_ring_dma,
-		__entry->flags & MTU3_EP_ENABLED ? 'E' : 'e',
-		__entry->flags & MTU3_EP_STALL ? 'S' : 's',
-		__entry->flags & MTU3_EP_WEDGE ? 'W' : 'w',
+ 		__entry->flags & MTU3_EP_ENABLED ? 'E' : 'e',
+ 		__entry->flags & MTU3_EP_STALL ? 'S' : 's',
+ 		__entry->flags & MTU3_EP_WEDGE ? 'W' : 'w',
 -- 
-2.43.0
+2.34.1
 
