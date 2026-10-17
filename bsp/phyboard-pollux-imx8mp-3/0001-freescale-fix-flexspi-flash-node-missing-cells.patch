@@ -1,0 +1,31 @@
+From 87121acd0be8449b36231a97120163ae47fc3098 Mon Sep 17 00:00:00 2001
+From: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+Date: Mon, 14 Sep 2026 23:29:41 +0000
+Subject: [PATCH] freescale: fix flexspi flash node missing cells
+
+Add missing #address-cells and #size-cells properties to the som_flash
+node to eliminate kernel stack trace warnings on Linux 7.2-dev.
+
+Upstream-Status: Inappropriate [Product-specific]
+Signed-off-by: Robert Berger <Robert.Berger@ReliableEmbeddedSystems.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi
+index 63adb1c4b3eb..5bb16dbfa57b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi
+@@ -91,6 +91,9 @@ som_flash: flash@0 {
+ 		spi-rx-bus-width = <4>;
+ 		spi-tx-bus-width = <1>;
+ 		vcc-supply = <&reg_vdd_1v8>;
++
++		#address-cells = <1>;
++		#size-cells = <1>;
+ 	};
+ };
+ 
+-- 
+2.34.1
+

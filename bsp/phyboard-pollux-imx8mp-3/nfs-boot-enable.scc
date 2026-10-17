@@ -1,0 +1,4 @@
+define KFEATURE_DESCRIPTION "Enable nfs boot"
+define KFEATURE_COMPATIBILITY all
+
+kconf hardware nfs-boot-enable.cfg

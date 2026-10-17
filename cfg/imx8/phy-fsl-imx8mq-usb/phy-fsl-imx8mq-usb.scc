@@ -1,0 +1,4 @@
+define KFEATURE_DESCRIPTION "Enable built-in i.MX8MQ USB PHY driver"
+define KFEATURE_COMPATIBILITY board
+
+kconf hardware phy-fsl-imx8mq-usb.cfg

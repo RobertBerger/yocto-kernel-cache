@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: MIT
+
+# =====================================================================
+# 1. GLOBAL INCLUDES (Process upstream metadata first)
+# =====================================================================
+
+include ktypes/standard/standard.scc nopatch
+
+# the crash utility (https://github.com/crash-utility/crash) needs this:
+include cfg/debug/debug-info/debug-info-reduced-disable.scc
+
+# default policy for standard kernels
+include features/latencytop/latencytop.scc
+include features/profiling/profiling.scc
+
+# USB Error: deferred probe pending: dwc3: failed to initialize core
+# we want it to be a built in kernel module (=y)
+include cfg/imx8/phy-fsl-imx8mq-usb/phy-fsl-imx8mq-usb.scc
+
+# this should be at the end
+include nfs-boot-enable.scc

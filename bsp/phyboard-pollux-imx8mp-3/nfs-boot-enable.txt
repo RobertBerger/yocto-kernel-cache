@@ -1,0 +1,59 @@
+# SOC Architecture and Vendor enabling
+CONFIG_ARCH_MXC=y
+CONFIG_NET_VENDOR_FREESCALE=y
+CONFIG_NET_VENDOR_STMICRO=y
+
+# Ethernet Core and standard NXP FEC port
+CONFIG_FEC=y
+
+# Synopsys DesignWare core and NXP i.MX8 Glue layer
+CONFIG_STMMAC_ETH=y
+CONFIG_STMMAC_PLATFORM=y
+CONFIG_DWMAC_IMX8=y
+
+# Link Management and PHY Layer
+CONFIG_PCS_XPCS=y
+CONFIG_PHYLINK=y
+
+----
+
+# this is what made it boot over nfs, but most likely there are way too many CONFIGS in there
+
+# SOC Architecture and Vendor enabling
+CONFIG_ARCH_MXC=y [OK]
+CONFIG_NET_VENDOR_STMICRO=y [OK]
+
+# Synopsys DesignWare core and NXP i.MX8 Glue layer
+CONFIG_STMMAC_ETH=y [m]
+CONFIG_STMMAC_PLATFORM=y [m]
+CONFIG_DWMAC_IMX8=y [m]
+
+# Link Management and PHY Layer
+CONFIG_PCS_XPCS=y [m]
+CONFIG_PHYLINK=y [m]
+
+
+# Core network infrastructure (Required to be built-in for an NFS root)
+CONFIG_NET=y [OK]
+CONFIG_INET=y [OK]
+CONFIG_IP_PNP=y [OK]
+CONFIG_IP_PNP_DHCP=y [OK]
+
+# Driver foundation dependencies (Must be =y so FEC can be =y)
+CONFIG_NETDEVICES=y [OK]
+CONFIG_ETHERNET=y [OK]
+CONFIG_NET_VENDOR_FREESCALE=y [OK]
+CONFIG_MII=y [=m]
+CONFIG_PHYLIB=y [OK]
+
+# Ethernet Core and standard NXP FEC port
+CONFIG_FEC=y [=m]
+
+----
+
+kernel command line:
+netargs=setenv bootargs console=${console},${baudrate} root=/dev/nfs ip=${nfsip} nfsroot=${serverip}:${nfsroot},v3,tcp fw_devlink=permissive clk_ignore_unused pd_ignore_unused regulator_ignore_unused
+
+not sure the kernel command line changes are needed
+
+No those changes are not needed
