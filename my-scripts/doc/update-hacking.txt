@@ -5,7 +5,7 @@ backup yocto-kernel-cache (tarball)
 cd yocto-kernel-cache
 
 ----------------------------
-== update/merge custom branches ==
+== update/merge custom branches 6.18 ==
 
 git co master
 git fetch official-upstream
@@ -37,8 +37,51 @@ git diff official-upstream/yocto-6.18 --stat
  features/hello-in-tree/non-default-testmod.patch                                             |  90 +++++++++++++
  16 files changed, 1387 insertions(+)
 
-----------------------------
+git co master
+cd my-scripts
+./push-all-to-github.sh
+
+---------------------------
+== update/merge custom branches 7.2 ==
+
+git co master
+git fetch official-upstream
+
+# with rebase the commit ids change with my local changes!
+# so we merge for backwards compatibility
+
+# 2. Merge your first branch directly against the remote tracking branch
+git checkout yocto-7.2
+git merge official-upstream/yocto-7.2
+
+# my local changes:
+
+git diff official-upstream/yocto-7.2 --stat
+
+ bsp/phyboard-pollux-imx8mp-3/0001-freescale-fix-flexspi-flash-node-missing-cells.patch |  31 +++++
+ bsp/phyboard-pollux-imx8mp-3/check-nfs-boot-enable.sh                                  |  28 ++++
+ bsp/phyboard-pollux-imx8mp-3/nfs-boot-enable.cfg                                       |  14 ++
+ bsp/phyboard-pollux-imx8mp-3/nfs-boot-enable.scc                                       |   4 +
+ bsp/phyboard-pollux-imx8mp-3/nfs-boot-enable.txt                                       |  59 +++++++++
+ bsp/phyboard-pollux-imx8mp-3/phyboard-pollux-imx8mp-3-base.scc                         |   7 +
+ bsp/phyboard-pollux-imx8mp-3/phyboard-pollux-imx8mp-3-standard-global-includes.scc     |  21 +++
+ bsp/phyboard-pollux-imx8mp-3/phyboard-pollux-imx8mp-3-standard-patch-queue.scc         |   6 +
+ bsp/phyboard-pollux-imx8mp-3/phyboard-pollux-imx8mp-3-standard.scc                     |  12 ++
+ bsp/pollux/0001-added-imx8mp-phyboard-pollux-rdk-training.dts-dummy.patch              | 681 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ bsp/pollux/pollux-standard-patch-queue.scc                                             |   6 +
+ bsp/pollux/pollux-standard.scc                                                         |  18 +++
+ cfg/debug/debug-info/debug-info-reduced-disable.cfg                                    |   1 +
+ cfg/debug/debug-info/debug-info-reduced-disable.scc                                    |   3 +
+ cfg/imx8/phy-fsl-imx8mq-usb/phy-fsl-imx8mq-usb.cfg                                     |   2 +
+ cfg/imx8/phy-fsl-imx8mq-usb/phy-fsl-imx8mq-usb.scc                                     |   4 +
+ features/hello-in-tree/hello-in-tree.cfg                                               |   1 +
+ features/hello-in-tree/non-atomic-in-tree-kernel-module.scc                            |   6 +
+ features/hello-in-tree/non-default-testmod.patch                                       |  90 +++++++++++++
+ 19 files changed, 994 insertions(+)
 
 git co master
 cd my-scripts
 ./push-all-to-github.sh
+
+---------------------------
+
