@@ -1,0 +1,55 @@
+From 3194ea27fce097a9d224299a3df13813db1a0f78 Mon Sep 17 00:00:00 2001
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date: Tue, 18 Aug 2026 12:27:42 +0200
+Subject: [PATCH 2/4] ARM: Update "ARM: enable interrupts when arm_notify_die()
+ is handling"
+
+Update "ARM: enable interrupts when arm_notify_die() is handling" to the
+version that has been applied upstream as "ARM: 9484/1: enable
+interrupts when unhandled user faults are triggered"
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ arch/arm/kernel/traps.c | 1 -
+ arch/arm/mm/fault.c     | 6 ++++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+index 6aa205a929205..afbd2ebe5c39d 100644
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -375,7 +375,6 @@ void arm_notify_die(const char *str, struct pt_regs *regs,
+ 		unsigned long err, unsigned long trap)
+ {
+ 	if (user_mode(regs)) {
+-		local_irq_enable();
+ 		current->thread.error_code = err;
+ 		current->thread.trap_no = trap;
+ 
+diff --git a/arch/arm/mm/fault.c b/arch/arm/mm/fault.c
+index 251bb243382fd..f7c6dba2a7620 100644
+--- a/arch/arm/mm/fault.c
++++ b/arch/arm/mm/fault.c
+@@ -641,6 +641,9 @@ do_DataAbort(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
+ 	if (!inf->fn(addr, fsr & ~FSR_LNX_PF, regs))
+ 		return;
+ 
++	if (likely(user_mode(regs)))
++		local_irq_enable();
++
+ 	pr_alert("8<--- cut here ---\n");
+ 	pr_alert("Unhandled fault: %s (0x%03x) at 0x%08lx\n",
+ 		inf->name, fsr, addr);
+@@ -671,6 +674,9 @@ do_PrefetchAbort(unsigned long addr, unsigned int ifsr, struct pt_regs *regs)
+ 	if (!inf->fn(addr, ifsr | FSR_LNX_PF, regs))
+ 		return;
+ 
++	if (likely(user_mode(regs)))
++		local_irq_enable();
++
+ 	pr_alert("8<--- cut here ---\n");
+ 	pr_alert("Unhandled prefetch abort: %s (0x%03x) at 0x%08lx\n",
+ 		inf->name, ifsr, addr);
+-- 
+2.43.0
+

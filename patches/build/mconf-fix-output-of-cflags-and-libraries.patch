@@ -24,7 +24,7 @@ index 240bf64829a6d..dde985a553aa0 100755
 @@ -10,9 +10,9 @@ PKG="ncursesw"
  PKG2="ncurses"
  
- if [ "$CROSS_CURSES_LIB" != "" ]; then
+ if [ "${CROSS_CURSES_LIB:-}" != "" ]; then
 -    echo libs=\'$CROSS_CURSES_LIB\'
 +    echo $CROSS_CURSES_LIB > ${libs}
      if [ x"$CROSS_CURSES_INC" != x ]; then

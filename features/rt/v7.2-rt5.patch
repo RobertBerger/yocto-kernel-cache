@@ -1,0 +1,20 @@
+From cff23f97ddddc1bb6c11f4b0eb7c0f0457503cfb Mon Sep 17 00:00:00 2001
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date: Tue, 18 Aug 2026 12:31:54 +0200
+Subject: [PATCH 4/4] v7.2-rt5
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ localversion-rt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/localversion-rt b/localversion-rt
+index ad3da1bcab7e8..0efe7ba1930e1 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt4
++-rt5
+-- 
+2.43.0
+

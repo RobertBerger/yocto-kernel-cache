@@ -1,0 +1,38 @@
+From eaf351389aa8a14680ad327afecb5abb78347081 Mon Sep 17 00:00:00 2001
+From: Bruce Ashfield <bruce.ashfield@gmail.com>
+Date: Tue, 1 Sep 2026 22:49:31 -0400
+Subject: [PATCH] Makefile: remap rust debug info paths (scope=all)
+
+Commit dda135077ecc9 ("rust: build: remap path to avoid absolute path")
+restricts rustc path remapping to macro scope, which leaves build paths
+in the DWARF debug info of rust objects. Under OpenEmbedded this trips
+the buildpaths QA check on kernel-dbg (samples/rust/*.ko and vmlinux),
+since the remap no longer reaches debug info and rustc rejects a second
+--remap-path-scope, so it cannot be widened from the recipe.
+
+Widen the scope to 'all' so rust debug info is remapped like C, restoring
+the pre-7.x behaviour that reproducible-build environments rely on.
+
+Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 94e4225d9f628..677ede70b251a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1189,8 +1189,8 @@ export CFLAGS_GCOV
+ # change __FILE__ to the relative path to the source directory
+ ifdef building_out_of_srctree
+ KBUILD_CPPFLAGS += -fmacro-prefix-map=$(srcroot)/=
+-ifeq ($(call rustc-option-yn, --remap-path-scope=macro),y)
+-KBUILD_RUSTFLAGS += --remap-path-prefix=$(srcroot)/= --remap-path-scope=macro
++ifeq ($(call rustc-option-yn, --remap-path-scope=all),y)
++KBUILD_RUSTFLAGS += --remap-path-prefix=$(srcroot)/= --remap-path-scope=all
+ endif
+ endif
+ 
+-- 
+2.43.0
+

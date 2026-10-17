@@ -20,3 +20,7 @@ patch powerpc-stackprotector-work-around-stack-guard-init-.patch
 patch POWERPC-Allow-to-enable-RT.patch
 patch sysfs-Add-sys-kernel-realtime-entry.patch
 patch Add-localversion-for-RT-release.patch
+patch v7.2-rt4.patch
+patch ARM-Update-ARM-enable-interrupts-when-arm_notify_die.patch
+patch serial-8250-Update-the-nbcon-series.patch
+patch v7.2-rt5.patch
