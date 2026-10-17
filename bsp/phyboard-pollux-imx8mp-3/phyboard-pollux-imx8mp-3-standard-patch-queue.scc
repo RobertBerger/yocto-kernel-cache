@@ -4,3 +4,5 @@
 # 3. PATCH QUEUE (Apply out-of-tree patches cleanly to your branch)
 # =====================================================================
 patch 0001-freescale-fix-flexspi-flash-node-missing-cells.patch
+# should be fixed in Linux 7.3-rc7:
+patch 0001-usb-mtu3-fix-trace-dereference.patch
